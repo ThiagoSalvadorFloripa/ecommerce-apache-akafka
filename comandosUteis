@@ -1,0 +1,47 @@
+PASSOS PARA DEMONSTRACAO DO kafka
+
+comando para levanadar servidor padrao:
+- dentro do diretorio bin/ rodar os camandos
+
+//rodar o zookeeper
+./zookeeper-server-start.sh ../config/zookeeper.properties
+
+// rodar Akafka, abra outro terminal
+./kafka-server-start.sh ../config/server.properties
+
+// creacao de topico, abra outro terminal
+- dentro do diretorio bin/
+./kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic LOJA_NOVO_PEDIDO
+
+./kafka-topics.sh // ver todos comandos disponiveis
+-- create // para criar o topico
+--bootstrap-server localhost:9092 // informa para o kafka qual porta está rodando
+--replication-factor 1 --partitions 1 // define duas propriedades padrao para o topico
+--topic // para definir o nome do topico
+
+//verifca topics criados, abra outro terminal
+./kafka-topics.sh --list --bootstrap-server localhost:9092
+
+// ver com mais detalhes os topicos
+./kafka-topics.sh --bootstrap-server localhost:9092 --describe
+
+// verifique também na outra janela do terminal se foi criado o topico com sucesso no outro terminal
+
+// criar um produtor, abra outro terminal
+./kafka-console-producer.sh --broker-list localhost:9092 --topic LOJA_NOVO_PEDIDO
+>pedido001,500
+>pedido002,100
+>pedido003,5200
+
+// criar um consumidor, abra outro terminal
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic LOJA_NOVO_PEDIDO
+/*explicacao
+se eu criar esse consumer agora, as mensagens que eu criei/armazenadas eu deveria receber agora? ou apartir de agora eu devo somente receber as mensagens que eu começar a enviar?
+resposta: decisão de projeto, da para fazer os dois.
+Para lé as mensagens desde o começo o comando é:
+em outro terminal execulte
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic LOJA_NOVO_PEDIDO --from-beginning
+para exemplificar mande uma nova mensagem no terminal aberto.
+Nesse momento toda mensagem que eu criar vai cair nos 2 consumer por decisão de projeto, mas da para mudar...
+
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic ECOMMERCE_NEW_ORDER --from-beginning
